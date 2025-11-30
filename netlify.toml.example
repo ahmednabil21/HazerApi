@@ -1,0 +1,28 @@
+# Netlify Configuration File
+# انسخ هذا الملف إلى مجلد الجذر لمشروع الفرونت إند وسمه netlify.toml
+
+# Proxy جميع طلبات /api/* إلى الـAPI
+[[redirects]]
+  from = "/api/*"
+  to = "http://hazerapi.somee.com/api/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+
+# Proxy جميع طلبات /auth/* إلى الـAPI
+[[redirects]]
+  from = "/auth/*"
+  to = "http://hazerapi.somee.com/auth/:splat"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+
+# Proxy Swagger (اختياري)
+[[redirects]]
+  from = "/swagger/*"
+  to = "http://hazerapi.somee.com/swagger/:splat"
+  status = 200
+  force = true
+
+# ملاحظة: :splat يمرر كل شيء بما في ذلك query parameters و paths
+
