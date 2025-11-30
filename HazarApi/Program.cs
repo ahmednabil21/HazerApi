@@ -149,18 +149,14 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// CORS Configuration
-var corsOrigins = builder.Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>() 
-                  ?? new[] { "http://localhost:7065", "https://localhost:7065" };
-
+// CORS Configuration - Allow all origins
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins(corsOrigins)
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+              .AllowAnyMethod();
     });
 });
 
@@ -182,7 +178,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseRouting();
 
 // CORS must be after UseRouting and before UseAuthentication
-app.UseCors("AllowFrontend");
+app.UseCors("AllowAll");
 
 // Static files for Swagger UI assets
 app.UseStaticFiles();
