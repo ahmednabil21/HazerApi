@@ -375,6 +375,18 @@ public class AttendanceService : IAttendanceService
             record.Notes = dto.Notes;
         record.UpdatedAt = DateTime.UtcNow;
 
+        // Close all active sessions for this employee when checking out
+        var activeSessions = await _context.UserSessions
+            .Where(s => s.EmployeeId == employeeId && s.IsActive && !s.IsDeleted)
+            .ToListAsync();
+
+        foreach (var session in activeSessions)
+        {
+            session.LogoutTime = DateTime.UtcNow;
+            session.IsActive = false;
+            session.UpdatedAt = DateTime.UtcNow;
+        }
+
         await _context.SaveChangesAsync();
 
         // Update monthly summary
