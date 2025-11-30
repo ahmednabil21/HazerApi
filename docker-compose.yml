@@ -1,6 +1,22 @@
 version: "3.9"
 
 services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hazar-api
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+    volumes:
+      - ./Logs:/app/Logs
+    depends_on:
+      - mysql
+
   mysql:
     image: mysql:8.0
     container_name: hazar-mysql
